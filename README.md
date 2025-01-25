@@ -1,7 +1,7 @@
 # WeatherMap 🌦
 A weather forecasting application built with Angular, utilizing Open-Meteo API for data.
 
-[<img src="[windows_console.png](https://github.com/user-attachments/assets/0279308a-ef43-4ea1-a833-602d749087ac)">]([https://docs.microsoft.com/en-us/windows/console/setconsolemode](https://romainchanteloup.github.io/WeatherMap/))
+[<img src="https://github.com/user-attachments/assets/0279308a-ef43-4ea1-a833-602d749087ac">](https://romainchanteloup.github.io/WeatherMap/)
 
 
 ## Technologies Used
