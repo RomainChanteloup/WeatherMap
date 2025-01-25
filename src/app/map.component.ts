@@ -5,7 +5,8 @@ import * as Highcharts from "highcharts/highmaps";
 import franceMap from "@highcharts/map-collection/countries/fr/custom/fr-all-all-mainland.topo.json";
 
 import HC_map from "highcharts/modules/map";
-import { WeatherData, WeatherService } from "../service/weather.service";
+import { WeatherService } from "../service/weather.service";
+import { WeatherData } from "../model/weather.model";
 HC_map(Highcharts);
 
 @Component({
@@ -14,32 +15,32 @@ HC_map(Highcharts);
   styleUrls: ["./map.component.scss"],
   imports: [CommonModule, HighchartsChartModule],
   template: `
-  <div class="chart-container">
-  <highcharts-chart
-      [Highcharts]="Highcharts"
-      [constructorType]="'mapChart'"
-      [options]="chartOptions"
-      [callbackFunction]="onChartCallback"
-      style="width: 100%; height: 100%; max-width: 600px;"
-    ></highcharts-chart>
-  </div>
-    
+    <div class="chart-container">
+      <highcharts-chart
+        [Highcharts]="Highcharts"
+        [constructorType]="'mapChart'"
+        [options]="chartOptions"
+        [callbackFunction]="onChartCallback"
+        class="map-chart"
+      ></highcharts-chart>
+    </div>
+
     <div class="weather-table">
-  <table>
-    <thead>
-      <tr>
-        <th>City</th>
-        <th>Temperature (°C)</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let weatherData of weatherDataList">
-        <td>{{ this.coordinatesList[weatherData.location_id].name }}</td>
-        <td>{{ weatherData.current.temperature_2m }}</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+      <table>
+        <thead>
+          <tr>
+            <th>City</th>
+            <th>Temperature (°C)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let weatherData of weatherDataList">
+            <td>{{ this.coordinatesList[weatherData.location_id].name }}</td>
+            <td>{{ weatherData.current.temperature_2m }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   `,
 })
 export class MapComponent implements OnInit {
@@ -55,7 +56,10 @@ export class MapComponent implements OnInit {
         map: franceMap,
       },
       title: {
-        text: undefined,
+        text: "Wheather Map",
+        style: {
+          fontSize: "30px",
+        },
       },
       mapNavigation: {
         enabled: true,
@@ -87,15 +91,19 @@ export class MapComponent implements OnInit {
         },
       },
       legend: {
-        enabled: false
+        enabled: false,
       },
     };
   }
 
   coordinatesList = [
     { name: "Paris", latitude: 48.8534, longitude: 2.3488 },
-    { name: "Lyon", latitude: 45.750000, longitude: 4.850000 },
+    { name: "Lyon", latitude: 45.75, longitude: 4.85 },
     { name: "Marseille", latitude: 43.297, longitude: 5.3811 },
+    { name: "Bordeaux", latitude: 44.836151, longitude: -0.580816 },
+    { name: "Lille", latitude: 50.62925, longitude: 3.057256 },
+    { name: "Brest", latitude: 48.389999, longitude: -4.49 },
+    { name: "Montpellier", latitude: 43.6119, longitude: 3.8772 },
   ];
 
   onChartCallback = (chart: Highcharts.Chart) => {
@@ -103,10 +111,9 @@ export class MapComponent implements OnInit {
     this.addData();
   };
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
-  addData () {
+  addData() {
     this.weatherService
       .getWeatherData(this.coordinatesList)
       .subscribe((weatherDataList) => {
@@ -117,16 +124,18 @@ export class MapComponent implements OnInit {
           lon: weatherData.longitude,
           text: `Temperature: ${weatherData.current.temperature_2m}°C`,
         }));
-          console.log("Adding series to chart");
-          this.chart?.addSeries({
+        console.log("Adding series to chart");
+        this.chart?.addSeries(
+          {
             type: "mappoint",
             name: "Cities",
             marker: {
-              radius: 5,
               fillColor: "tomato",
             },
             data: weatherData,
-          } as Highcharts.SeriesMappointOptions, true);
+          } as Highcharts.SeriesMappointOptions,
+          true
+        );
       });
   }
 }
