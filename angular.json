@@ -5,7 +5,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "demo": {
+    "WeatherMap": {
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:application",
@@ -22,7 +22,9 @@
               "namedChunks": false,
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false
+              "sourceMap": false,
+              "outputPath": "dist",
+              "baseHref": "/WeatherMap/"
             }
           },
           "options": {
@@ -40,10 +42,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "development": {
-              "buildTarget": "demo:build:development"
+              "buildTarget": "WeatherMap:build:development"
             },
             "production": {
-              "buildTarget": "demo:build:production"
+              "buildTarget": "WeatherMap:build:production"
             }
           },
           "defaultConfiguration": "development"
